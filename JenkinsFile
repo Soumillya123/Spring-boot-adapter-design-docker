@@ -1,0 +1,33 @@
+pipeline{
+    agent any
+    tools{
+        maven 'Maven-Build'
+    }
+    stages{
+        stage('Build Maven Project'){
+            steps{
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '7feeb08a-0ce4-41b9-b9e8-bfda5e052ba5', 
+                url: 'https://github.com/Soumillya123/Spring-boot-adapter-design-docker.git']])
+                bat 'mvn clean package -DskipTests'
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                script{
+                    bat 'docker build -t practice/springboot-adapter-design:interview_practice .'
+                }
+            }
+            
+        }
+    
+	stage('Run Docker Container'){
+            steps{
+                script{
+                    bat 'docker container run -p 9090:9090 -d --name springboot-design-pattern practice/springboot-adapter-design:interview_practice' 
+                }
+            }
+            
+        }
+	
+	}
+}
