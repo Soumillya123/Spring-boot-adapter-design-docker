@@ -38,7 +38,7 @@ public class PaymentService {
 	
 	public PaymentResponse processPayment(PaymentRequest paymentRequest,String gateway) {
 		PaymentProcessor paymentProcessor=paymentProcessorMap.get(gateway+"Adapter");
-		if (Optional.ofNullable(paymentProcessor) != null) {
+		if (!Optional.ofNullable(paymentProcessor).isPresent()) {
             throw new AdapterNotFoundException("Payment gateway '" + gateway + "' not supported.");
         }
 		
